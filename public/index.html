@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yasno Games</title>
+<meta name="description" content="games. obviously. An independent game studio.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121417" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Yasno Games">
+<meta property="og:title" content="Yasno Games">
+<meta property="og:description" content="games. obviously.">
+<meta property="og:url" content="https://yasno.games/">
+<meta property="og:image" content="https://yasno.games/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root {
+  --ground: #F5F5F2;
+  --ink: #121417;
+  --muted: #4A4F57;
+  --link: #1F57D6;
+  --link-hover: #12399A;
+  --rule: #D6D7D2;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #121417;
+    --ink: #F5F5F2;
+    --muted: #B4B9C0;
+    --link: #8FB0FF;
+    --link-hover: #C2D4FF;
+    --rule: #2A2E33;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 48px 16px;
+  text-align: center;
+}
+h1 { margin: 0; line-height: 0; }
+h1 img { width: min(560px, 80vw); height: auto; }
+.tagline, .contact, footer {
+  font-family: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+.tagline { margin: 0; font-size: clamp(16px, 3vw, 24px); color: var(--muted); letter-spacing: 0.02em; }
+.contact { margin: 12px 0 0; font-size: 16px; }
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--link-hover); }
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 20px;
+  font-size: 15px;
+}
+nav a { display: inline-block; padding: 12px 4px; }
+footer {
+  padding: 20px 16px 28px;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>
+    <picture>
+      <source srcset="/brand/yasno-wordmark-reversed.svg" media="(prefers-color-scheme: dark)">
+      <img src="/brand/yasno-wordmark.svg" alt="Yasno" width="560" height="108">
+    </picture>
+  </h1>
+  <p class="tagline">games. obviously.</p>
+  <p class="contact"><a href="mailto:hello@yasno.games">hello@yasno.games</a></p>
+  <nav aria-label="Yasno Games elsewhere">
+    <ul>
+      <li><a href="https://yasnogames.itch.io/">itch.io</a></li>
+      <li><a href="https://www.youtube.com/@yasnogames">YouTube</a></li>
+      <li><a href="https://bsky.app/profile/yasno.games" rel="me">Bluesky</a></li>
+      <li><a href="https://x.com/yasnogames" rel="me">X</a></li>
+      <li><a href="https://github.com/yasnogames">GitHub</a></li>
+    </ul>
+  </nav>
+</main>
+<footer>© 2026 Yasno Games</footer>
+</body>
+</html>

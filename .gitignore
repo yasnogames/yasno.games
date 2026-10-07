@@ -1,0 +1,4 @@
+.firebase/
+*.log
+__pycache__/
+.venv/

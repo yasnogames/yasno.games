@@ -1,0 +1,66 @@
+# Deploys public/ to Firebase Hosting as it stands in the repo. A push to
+# main, or a run started by hand on any commit, branch or tag, replaces the
+# live site; a push to any other branch deploys to a preview channel of its
+# own, which expires after a week, and the job summary links it.
+#
+# No key is stored. GitHub's token for this repository is exchanged through
+# the project's Workload Identity pool, which admits only the yasnogames
+# organisation, for the github-deploy service account, which holds only what
+# a Hosting deploy needs.
+name: deploy
+
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Commit, branch or tag to put live
+        required: true
+        default: main
+
+permissions:
+  contents: read
+  id-token: write
+
+# Live deploys queue behind one another; each preview channel queues on its own.
+concurrency:
+  group: deploy-${{ (github.event_name == 'workflow_dispatch' || github.ref_name == 'main') && 'live' || github.ref_name }}
+
+env:
+  PROJECT: yasno-games
+  FIREBASE_TOOLS: firebase-tools@15.32.1
+  WORKLOAD_IDENTITY_PROVIDER: projects/510730991460/locations/global/workloadIdentityPools/github/providers/yasnogames
+  SERVICE_ACCOUNT: github-deploy@yasno-games.iam.gserviceaccount.com
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Deploy live
+        if: github.event_name == 'workflow_dispatch' || github.ref_name == 'main'
+        run: |
+          npx --yes "$FIREBASE_TOOLS" deploy --only hosting --project "$PROJECT" \
+            --non-interactive --message "$(git rev-parse --short HEAD)"
+          echo "Live: https://yasno.games/ at $(git rev-parse --short HEAD)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Deploy a preview
+        if: github.event_name == 'push' && github.ref_name != 'main'
+        run: |
+          # Channel ids take only lower-case letters, digits and hyphens.
+          channel=$(echo "$GITHUB_REF_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | cut -c1-30)
+          npx --yes "$FIREBASE_TOOLS" hosting:channel:deploy "$channel" --expires 7d \
+            --project "$PROJECT" --non-interactive --json > channel.json
+          url=$(jq -r '.result[].url' channel.json)
+          echo "Preview of \`$GITHUB_REF_NAME\`: $url" >> "$GITHUB_STEP_SUMMARY"
