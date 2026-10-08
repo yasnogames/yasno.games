@@ -30,7 +30,8 @@ python -m venv .venv
 ```
 
 `public/intro.js` is the page's mark: the round monogram, breathing, that turns
-into the wordmark and types the tagline once it is hovered or pressed. It is
+into the wordmark and types the tagline once it is hovered or pressed; after
+that, the full stop runs from the pointer and comes home when left alone. It is
 built from the same outlines by `tools/intro.py`; edit that, never the script,
 and run it the same way. Without JavaScript the page shows the wordmark as is.
 

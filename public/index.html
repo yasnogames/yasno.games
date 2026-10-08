@@ -73,7 +73,10 @@ h1 img { width: min(560px, 80vw); height: auto; }
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip-path: inset(50%); white-space: nowrap;
 }
+/* Above the page, so the full stop runs over the links, not under them. */
 .mark {
+  position: relative;
+  z-index: 1;
   display: block;
   width: min(92vw, 880px);
   padding: 0;
