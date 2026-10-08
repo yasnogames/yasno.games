@@ -119,19 +119,20 @@ def wordmark(letters, dot):
     return document(x1 - x0, y1 - y0, run.svg(0, 0), view=(x0, y0, x1 - x0, y1 - y0))
 
 
-def monogram(ground, letter, dot, round_):
-    """я. on a 1000 square, centred on its ink at half the frame's height in type."""
-    run = Run(UNBOUNDED_HEAVY, "я.", 500, -0.04, [letter, dot])
+def monogram(ground, letter, dot=None, square=False):
+    """я in a circle or a square 1000 across, centred on its ink at half the frame's height
+    in type. A `dot` sets я. instead; the circle needs none, being the dot itself."""
+    run = Run(UNBOUNDED_HEAVY, "я." if dot else "я", 500, -0.04, [letter, dot])
     x0, y0, x1, y1 = run.bounds
-    shape = (f'<circle cx="500" cy="500" r="500" fill="{ground}"/>' if round_
-             else f'<rect width="1000" height="1000" fill="{ground}"/>')
+    shape = (f'<rect width="1000" height="1000" fill="{ground}"/>' if square
+             else f'<circle cx="500" cy="500" r="500" fill="{ground}"/>')
     return document(1000, 1000, shape + run.svg(500 - (x0 + x1) / 2, 500 - (y0 + y1) / 2))
 
 
 def preview():
     """The link preview: the wordmark over the tagline on paper, 1200 x 630."""
     mark = Run(UNBOUNDED_BOLD, "yasno.", 1000, -0.03, [INK] * 5 + [ACCENT])
-    line = Run(MONO, "games. obviously.", 180, 0.02, [MUTED])
+    line = Run(MONO, "games. got it.", 180, 0.02, [MUTED])
     body, bounds = stack([mark, line], 190)
     return fitted(1200, 630, body, bounds, 0.62, PAPER)
 
@@ -149,15 +150,17 @@ def main():
     files = {
         BRAND / "yasno-wordmark.svg": wordmark(INK, ACCENT),
         BRAND / "yasno-wordmark-reversed.svg": wordmark(PAPER, ACCENT_ON_DARK),
-        BRAND / "yasno-monogram.svg": monogram(ACCENT, WHITE, WHITE, round_=True),
-        BRAND / "yasno-monogram-square.svg": monogram(ACCENT, WHITE, WHITE, round_=False),
-        PUBLIC / "favicon.svg": monogram(ACCENT, WHITE, WHITE, round_=True),
+        BRAND / "yasno-monogram.svg": monogram(ACCENT, WHITE),
+        BRAND / "yasno-monogram-square.svg": monogram(PAPER, INK, ACCENT, square=True),
+        BRAND / "yasno-monogram-square-reversed.svg": monogram(INK, PAPER, ACCENT_ON_DARK, square=True),
+        PUBLIC / "favicon.svg": monogram(ACCENT, WHITE),
     }
     for path, svg in files.items():
         write(path, svg)
 
-    render(BRAND / "yasno-monogram.png", files[BRAND / "yasno-monogram.svg"], 1024)
-    render(BRAND / "yasno-monogram-square.png", files[BRAND / "yasno-monogram-square.svg"], 1024)
+    for name in ("yasno-monogram", "yasno-monogram-square", "yasno-monogram-square-reversed"):
+        render(BRAND / f"{name}.png", files[BRAND / f"{name}.svg"], 1024)
+    # iOS cuts its own corners, so the touch icon is a square edge to edge.
     render(PUBLIC / "apple-touch-icon.png", files[BRAND / "yasno-monogram-square.svg"], 180)
     (PUBLIC / "og.png").write_bytes(bytes(resvg_py.svg_to_bytes(svg_string=preview())))
 
