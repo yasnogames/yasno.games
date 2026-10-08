@@ -148,7 +148,16 @@
     button.setAttribute('aria-disabled', 'true');
     schedule();
   }
-  button.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') play(); });
+  // A pointer already resting on the mark when the page loads would set it off before
+  // anyone saw the circle: hover counts only after a breath's hold, and if the pointer is
+  // still there when the hold ends, it plays then. A press always plays at once.
+  const HOLD = 1200;
+  let held = true;
+  setTimeout(() => {
+    held = false;
+    if (matchMedia('(hover: hover)').matches && button.matches(':hover')) play();
+  }, HOLD);
+  button.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse' && !held) play(); });
   button.addEventListener('click', play);
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { theme(); schedule(); });
   draw(born);
