@@ -29,6 +29,11 @@ python -m venv .venv
 .venv/Scripts/python -I tools/brand.py
 ```
 
+`public/intro.js` is the page's mark: the round monogram, breathing, that turns
+into the wordmark and types the tagline once it is hovered or pressed. It is
+built from the same outlines by `tools/intro.py`; edit that, never the script,
+and run it the same way. Without JavaScript the page shows the wordmark as is.
+
 The typefaces are Unbounded (marks) and JetBrains Mono (tagline), both under
 the SIL Open Font License; their licences sit beside them in `tools/fonts/`.
 

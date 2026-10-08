@@ -1,3 +1,4 @@
 fonttools==4.66.1
 resvg_py==0.5.0
+shapely==2.2.0
 uharfbuzz==0.56.3

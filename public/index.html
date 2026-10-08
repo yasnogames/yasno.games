@@ -18,6 +18,8 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<script>document.documentElement.classList.add('js')</script>
+<script src="/intro.js" defer onerror="document.documentElement.classList.remove('js')"></script>
 <style>
 :root {
   --ground: #F5F5F2;
@@ -26,6 +28,8 @@
   --link: #1F57D6;
   --link-hover: #12399A;
   --rule: #D6D7D2;
+  --accent: #2B6CF6;
+  --dot: #2B6CF6;
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
@@ -36,6 +40,7 @@
     --link: #8FB0FF;
     --link-hover: #C2D4FF;
     --rule: #2A2E33;
+    --dot: #5B8DFF;
   }
 }
 * { box-sizing: border-box; }
@@ -58,8 +63,33 @@ main {
   padding: 48px 16px;
   text-align: center;
 }
+.hero { display: flex; flex-direction: column; align-items: center; gap: 28px; }
 h1 { margin: 0; line-height: 0; }
 h1 img { width: min(560px, 80vw); height: auto; }
+/* With script, the mark (intro.js) stands in for the wordmark and tagline, which stay for
+   screen readers. */
+.js .hero { min-height: calc(min(92vw, 880px) * 540 / 1200); }
+.js .hero h1, .js .hero .tagline {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+.mark {
+  display: block;
+  width: min(92vw, 880px);
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  line-height: 0;
+  cursor: pointer;
+}
+.mark[aria-disabled="true"] { cursor: default; }
+.mark:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
+.mark svg { display: block; width: 100%; height: auto; overflow: visible; }
+.mark .ring { fill: var(--accent); }
+.mark .ink { fill: var(--ink); }
+.mark .dot { fill: var(--dot); }
+.mark .muted { fill: var(--muted); }
 .tagline, .contact, footer {
   font-family: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
 }
@@ -89,13 +119,15 @@ footer {
 </head>
 <body>
 <main>
-  <h1>
-    <picture>
-      <source srcset="/brand/yasno-wordmark-reversed.svg" media="(prefers-color-scheme: dark)">
-      <img src="/brand/yasno-wordmark.svg" alt="Yasno" width="560" height="108">
-    </picture>
-  </h1>
-  <p class="tagline">games. got it.</p>
+  <div class="hero">
+    <h1>
+      <picture>
+        <source srcset="/brand/yasno-wordmark-reversed.svg" media="(prefers-color-scheme: dark)">
+        <img src="/brand/yasno-wordmark.svg" alt="Yasno" width="560" height="108">
+      </picture>
+    </h1>
+    <p class="tagline">games. got it.</p>
+  </div>
   <p class="contact"><a href="mailto:hello@yasno.games">hello@yasno.games</a></p>
   <nav aria-label="Yasno Games elsewhere">
     <ul>
