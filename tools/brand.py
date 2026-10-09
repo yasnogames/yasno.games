@@ -3,10 +3,13 @@
 Every mark is shaped with HarfBuzz and written as SVG paths, so no SVG needs
 a font installed; every PNG is rendered from those SVGs, so the two never
 disagree. Output goes under public/: the brand kit in public/brand/, plus the
-favicon, the touch icon and the link preview the page names.
+favicon, the touch icon, the app icons and their manifest, and the link preview
+the page names.
 
     python -I tools/brand.py
 """
+import json
+import math
 import pathlib
 
 import resvg_py
@@ -122,14 +125,39 @@ def wordmark(letters, dot):
     return document(x1 - x0, y1 - y0, run.svg(0, 0), view=(x0, y0, x1 - x0, y1 - y0))
 
 
-def monogram(ground, letter, dot=None, square=False):
-    """я in a circle or a square 1000 across, centred on its ink at half the frame's height
-    in type. A `dot` sets я. instead; the circle needs none, being the dot itself."""
-    run = Run(UNBOUNDED_HEAVY, "я." if dot else "я", 500, -0.04, [letter, dot])
+def letter(across):
+    """The size the monograms set я at in a frame `across` wide: so that я. spans 76% of
+    the square corner to corner, inside the middle 80% that a maskable app icon keeps
+    whatever shape the system crops it to. The round monogram's я is the same size."""
+    x0, y0, x1, y1 = Run(UNBOUNDED_HEAVY, "я.", 1000, -0.04, [INK]).bounds
+    return across * 760 / math.hypot(x1 - x0, y1 - y0)
+
+
+def monogram(ground, letter_fill, dot=None, square=False):
+    """я in a circle or a square 1000 across, centred on its ink. A `dot` sets я. instead;
+    the circle needs none, being the dot itself."""
+    run = Run(UNBOUNDED_HEAVY, "я." if dot else "я", letter(1000), -0.04, [letter_fill, dot])
     x0, y0, x1, y1 = run.bounds
     shape = (f'<rect width="1000" height="1000" fill="{ground}"/>' if square
              else f'<circle cx="500" cy="500" r="500" fill="{ground}"/>')
     return document(1000, 1000, shape + run.svg(500 - (x0 + x1) / 2, 500 - (y0 + y1) / 2))
+
+
+def manifest():
+    """What an installed or pinned page takes its name, icons and colours from."""
+    return json.dumps({
+        "name": "Yasno Games",
+        "short_name": "Yasno",
+        "start_url": "/",
+        "display": "standalone",
+        "background_color": PAPER,
+        "theme_color": PAPER,
+        "icons": [
+            {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
+            {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png"},
+            {"src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+        ],
+    }, indent=2) + "\n"
 
 
 def signature(letters, dot, muted):
@@ -178,6 +206,11 @@ def main():
 
     for name in ("yasno-monogram", "yasno-monogram-square", "yasno-monogram-square-reversed"):
         render(BRAND / f"{name}.png", files[BRAND / f"{name}.svg"], 1024)
+    # The app icons: the round monogram, and the square one for systems that crop.
+    for size in (192, 512):
+        render(PUBLIC / f"icon-{size}.png", files[BRAND / "yasno-monogram.svg"], size)
+    render(PUBLIC / "icon-maskable-512.png", files[BRAND / "yasno-monogram-square.svg"], 512)
+    write(PUBLIC / "manifest.webmanifest", manifest())
     # iOS cuts its own corners, so the touch icon is a square edge to edge.
     render(PUBLIC / "apple-touch-icon.png", files[BRAND / "yasno-monogram-square.svg"], 180)
     (PUBLIC / "og.png").write_bytes(bytes(resvg_py.svg_to_bytes(svg_string=preview())))

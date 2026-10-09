@@ -19,8 +19,9 @@ npx firebase-tools@latest deploy --only hosting --project yasno-games --account 
 
 `public/brand/` holds the logo as SVG outlines and PNG renders, served at
 `https://yasno.games/brand/` for press and storefronts. `public/favicon.svg`,
-`public/apple-touch-icon.png` and `public/og.png` (the link preview) come from
-the same source. They are generated once and committed; to change them, edit
+`public/apple-touch-icon.png`, the app icons `public/icon-*.png` with
+`public/manifest.webmanifest` (for a page pinned to a taskbar or installed),
+and `public/og.png` (the link preview) come from the same source. They are generated once and committed; to change them, edit
 `tools/brand.py`, never the files, and run it:
 
 ```bash
