@@ -23,6 +23,7 @@ BRAND = PUBLIC / "brand"
 INK = "#121417"
 PAPER = "#F5F5F2"
 MUTED = "#4A4F57"
+MUTED_ON_DARK = "#B4B9C0"
 WHITE = "#FFFFFF"
 ACCENT = "#2B6CF6"
 ACCENT_ON_DARK = "#5B8DFF"
@@ -98,10 +99,12 @@ def document(width, height, body, background=None, view=None):
     )
 
 
-def fitted(width, height, body, bounds, fraction, background=None):
-    """`body` scaled to fill `fraction` of the frame's width or height, centred."""
+def fitted(width, height, body, bounds, fraction, background=None, area=None):
+    """`body` scaled to fill `fraction` of the frame's width or height, centred.
+    `area`, a width and height, fits it to that much of the middle instead."""
     x0, y0, x1, y1 = bounds
-    k = min(width * fraction / (x1 - x0), height * fraction / (y1 - y0))
+    aw, ah = area or (width, height)
+    k = min(aw * fraction / (x1 - x0), ah * fraction / (y1 - y0))
     cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
     g = (f'<g transform="translate({number(width / 2)} {number(height / 2)}) scale({k:.5f}) '
          f'translate({number(-cx)} {number(-cy)})">{body}</g>')
@@ -129,12 +132,24 @@ def monogram(ground, letter, dot=None, square=False):
     return document(1000, 1000, shape + run.svg(500 - (x0 + x1) / 2, 500 - (y0 + y1) / 2))
 
 
+def signature(letters, dot, muted):
+    """The wordmark over the tagline."""
+    mark = Run(UNBOUNDED_BOLD, "yasno.", 1000, -0.03, [letters] * 5 + [dot])
+    line = Run(MONO, "games. got it.", 180, 0.02, [muted])
+    return stack([mark, line], 190)
+
+
 def preview():
-    """The link preview: the wordmark over the tagline on paper, 1200 x 630."""
-    mark = Run(UNBOUNDED_BOLD, "yasno.", 1000, -0.03, [INK] * 5 + [ACCENT])
-    line = Run(MONO, "games. got it.", 180, 0.02, [MUTED])
-    body, bounds = stack([mark, line], 190)
+    """The link preview: the signature on paper, 1200 x 630."""
+    body, bounds = signature(INK, ACCENT, MUTED)
     return fitted(1200, 630, body, bounds, 0.62, PAPER)
+
+
+def banner(ground, letters, dot, muted):
+    """The YouTube channel banner, 2560 x 1440: the signature inside the 1235 x 338
+    middle that every device shows; TVs show the whole frame, phones only that."""
+    body, bounds = signature(letters, dot, muted)
+    return fitted(2560, 1440, body, bounds, 0.86, ground, area=(1235, 338))
 
 
 def write(path, text):
@@ -157,6 +172,9 @@ def main():
     }
     for path, svg in files.items():
         write(path, svg)
+    for name, svg in (("yasno-banner", banner(PAPER, INK, ACCENT, MUTED)),
+                      ("yasno-banner-reversed", banner(INK, PAPER, ACCENT_ON_DARK, MUTED_ON_DARK))):
+        (BRAND / f"{name}.png").write_bytes(bytes(resvg_py.svg_to_bytes(svg_string=svg)))
 
     for name in ("yasno-monogram", "yasno-monogram-square", "yasno-monogram-square-reversed"):
         render(BRAND / f"{name}.png", files[BRAND / f"{name}.svg"], 1024)
