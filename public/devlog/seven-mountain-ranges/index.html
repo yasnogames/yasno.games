@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seven mountain ranges · Yasno Games</title>
+<meta name="description" content="We have built the mountains in our hex-tile MMO seven times. Here is what each one looked like, and where the seventh stands.">
+<link rel="canonical" href="https://yasno.games/devlog/seven-mountain-ranges/">
+<link rel="alternate" type="application/atom+xml" title="Yasno Games devlog" href="/devlog/feed.xml">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121417" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Yasno Games">
+<meta property="og:title" content="Seven mountain ranges · Yasno Games">
+<meta property="og:description" content="We have built the mountains in our hex-tile MMO seven times. Here is what each one looked like, and where the seventh stands.">
+<meta property="og:url" content="https://yasno.games/devlog/seven-mountain-ranges/">
+<meta property="og:image" content="https://yasno.games/devlog/seven-mountain-ranges/range.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root {
+  --ground: #F5F5F2;
+  --ink: #121417;
+  --muted: #4A4F57;
+  --link: #1F57D6;
+  --link-hover: #12399A;
+  --rule: #D6D7D2;
+  --card: #FBFBF9;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #121417;
+    --ink: #F5F5F2;
+    --muted: #B4B9C0;
+    --link: #8FB0FF;
+    --link-hover: #C2D4FF;
+    --rule: #2A2E33;
+    --card: #181B1F;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+}
+header, main, footer { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+header { display: flex; align-items: baseline; gap: 14px; padding-top: 28px; padding-bottom: 8px; }
+header img { display: block; width: 120px; height: auto; }
+.mono, header .section, footer {
+  font-family: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+header .section { font-size: 15px; color: var(--muted); }
+main { padding-top: 32px; padding-bottom: 48px; }
+h1 { font-size: clamp(28px, 6vw, 40px); line-height: 1.15; margin: 0 0 8px; }
+h2 { font-size: 24px; line-height: 1.25; margin: 40px 0 0; }
+h3 { font-size: 20px; margin: 32px 0 0; }
+.meta { font-size: 14px; color: var(--muted); margin: 0 0 32px; }
+article img, article video { display: block; max-width: 100%; height: auto; margin: 28px auto; border-radius: 4px; }
+article pre { overflow-x: auto; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 4px; font-size: 15px; }
+article code { font-size: 0.9em; }
+article blockquote { margin: 24px 0; padding: 0 0 0 18px; border-left: 3px solid var(--rule); color: var(--muted); }
+article hr { border: 0; border-top: 1px solid var(--rule); margin: 40px 0; }
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--link-hover); }
+ol.posts { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 32px; }
+.card {
+  display: block; color: inherit; text-decoration: none;
+  border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--card);
+}
+.card:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+.cover { position: relative; aspect-ratio: 1200 / 630; background: #2A2E33; }
+.cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* The title sits on the picture; the scrim keeps it legible on any of them. */
+.cover::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(12, 14, 17, 0.85), rgba(12, 14, 17, 0.35) 45%, rgba(12, 14, 17, 0) 72%);
+}
+.cover .head { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 18px 20px; color: #F5F5F2; }
+.cover .meta { margin: 0 0 4px; color: rgba(245, 245, 242, 0.82); }
+.cover h2 { margin: 0; font-size: clamp(22px, 5vw, 30px); }
+.card:hover h2 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.brief { margin: 0; padding: 16px 20px 18px; }
+footer {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
+  padding-top: 20px; padding-bottom: 28px;
+  border-top: 1px solid var(--rule);
+  font-size: 13px; color: var(--muted);
+}
+</style>
+</head>
+<body>
+<header>
+  <a href="/"><picture>
+    <source srcset="/brand/yasno-wordmark-reversed.svg" media="(prefers-color-scheme: dark)">
+    <img src="/brand/yasno-wordmark.svg" alt="Yasno" width="120" height="23">
+  </picture></a>
+  <a class="section" href="/devlog/">devlog</a>
+</header>
+<main>
+<article>
+<h1>Seven mountain ranges</h1>
+<p class="meta mono"><time datetime="2026-10-12">12 Oct 2026</time> · Yasno Games</p>
+<p><video src="/devlog/seven-mountain-ranges/range.mp4" poster="/devlog/seven-mountain-ranges/range.jpg" autoplay muted loop playsinline aria-label="Sliding out over a crest at dawn, looking down across a forested valley to ridge after ridge"></video></p>
+<p>We're Yasno Games, and we're making an MMO on a hex grid: an open world you
+cross on foot, generated from a seed. The mountains in that picture are our
+seventh go at a mountain range. The first six are gone, but git keeps
+everything, so we went back through it to show you what they looked like.</p>
+<p>There are two kinds of picture here. The top-down maps are drawn from each
+version's own height code: 20 km of its world, all in the same light, one
+colour for one height across all of them. Everything else is the game itself,
+this month's build unless the text says otherwise.</p>
+<h2>Noise, twice</h2>
+<p>The first ranges, in March 2024, were Perlin noise: a height for every tile,
+read off a smooth random field. Noise makes hills. It never makes a range,
+because a range has a direction, and noise has none.</p>
+<p>In October 2025 the noise got regions, and mountain regions got cliffs stepped
+in strata.</p>
+<p><video src="/devlog/seven-mountain-ranges/terraces.mp4" poster="/devlog/seven-mountain-ranges/noise.jpg" autoplay muted loop playsinline aria-label="Walking among hexagonal columns stepping up a noise hill, February 2026"></video></p>
+<p>That is the second one in the game in February 2026, the week before it went:
+every tile a hexagonal column, so a hill is a staircase of them.</p>
+<h2>Plates, then nothing</h2>
+<p>In February we started from tectonics. The world split into plates, each with
+its own base height, their edges warped so they curve, and a ridge raised
+where two plates push together.</p>
+<p><img src="/devlog/seven-mountain-ranges/relief-plates.jpg" alt="Relief map: terraces stepping between plates' base heights, crossed by one ridge along a plate boundary" /></p>
+<p>What you get is terraces where one plate's height meets the next, and one
+ridge. Two days later we took the heights out and started modelling what lies
+under the crust: denser and lighter provinces, hotspots, heat spreading from
+them. Those were fields, and none of them was a height yet. For those weeks
+the world in the game was flat.</p>
+<h2>Placing the mountains</h2>
+<p>In March we stopped deriving mountains and placed them. A continent grew a
+spine of peak cones joined by ridgelines, and streams grew down from the
+ridges, carving ravines as they merged. Over the summer an erosion stack went
+on top: glacial cirques bitten into the shaded side of the high peaks, and
+slopes shaped convex at the crest and concave at the foot.</p>
+<p><img src="/devlog/seven-mountain-ranges/relief-spine.jpg" alt="Relief map: a cluster of conical peaks up to 2.8 km with cirque bowls near the summits and ravines down the flanks, each cone's round footprint visible on the plain" /></p>
+<p>These are the tallest of the maps, up to 2.8 km, and they had a feel in the
+game we liked.</p>
+<p><video src="/devlog/seven-mountain-ranges/spine-flyover.mp4" poster="/devlog/seven-mountain-ranges/spine-peak.jpg" autoplay muted loop playsinline aria-label="Turning above the top of a spine peak in the August build, the cone dropping to the coast all round"></video></p>
+<p>That is the view from the top of one, in the August build we rebuilt to film
+it: the cone falling away to the coast on every side.</p>
+<p>From above you can see the problem. Each cone is a circle stamped on the
+plain, and where two cones meet there is a straight seam. A placed mountain
+does not know why it is there, so nothing around it agrees with it.</p>
+<h2>Letting them emerge</h2>
+<p>In September the plates came back as the source. Crust thickens where two
+plates push together, and the height follows from the thickness. The spine,
+the cirques and the slope shaping came out: about ten thousand lines of code,
+deleted in one commit.</p>
+<p><img src="/devlog/seven-mountain-ranges/relief-orogen.jpg" alt="Relief map: one smooth swell of high ground with a single steep flank and no ridges or valleys inside it" /></p>
+<p>Thickness gives you a swell. It gives you no ridges, and no valleys inside it.</p>
+<h2>Sheets</h2>
+<p>Two days later we rewrote the plates themselves, and that is the seventh
+range. Where one plate runs under another the crust stacks into sheets, the
+way real fold-and-thrust belts are built.</p>
+<p><img src="/devlog/seven-mountain-ranges/relief-thrust.jpg" alt="Relief map: bands of parallel stepped thrust sheets running in straight lines with sharp 60-degree bends" /></p>
+<p>The plates were cells on a lattice, and the ranges followed the lattice:
+straight runs, 60° corners. The next day every plate edge started being read
+through a smooth warp, so coasts, fronts and ranges bend together and never at
+a corner.</p>
+<h2>Walkable</h2>
+<p>That version had a problem you could feel. Most of the ground was walkable,
+and the ridges, the part you came for, were almost all walls. A player climbs
+one level per tile, and the faces were steeper than that.</p>
+<p>We could raise the step or lower the mountains. We lowered the mountains to
+the angle loose rock actually rests at, 34°, with scree running out about 150
+tiles from the foot of each range. That is still too steep to walk straight
+up, so you climb across the face, the way you would a real scree slope.
+Ground at 45° or steeper fell from 2.4% of land to 0.75%, and what stayed
+that steep was mostly gorge walls, which is where you would expect a wall.</p>
+<p>For scale: a tile is about 1.7 m across and a level is 0.8 m. The geology is
+Earth's, squeezed so a range fits in a world you cross on foot.</p>
+<h2>What didn't work this month</h2>
+<p>Ravines. We cut a gully down a range's flank every 46 tiles, 17 levels deep.
+In the game it was corrugated iron: a ridge every 80
+metres, walking across it felt like waves, and the far view could not draw
+it. It came out the same day.</p>
+<p>What did stay: a range's crest now rounds off as fast as its height wears
+down, trees thin out where the slope gets too steep to hold soil, old
+collisions inside a continent leave worn-down belts instead of nothing, and
+this month rivers started running along the troughs between ridges and
+crossing at the passes.</p>
+<p><img src="/devlog/seven-mountain-ranges/trough-river.jpg" alt="A river running down the trough at the foot of a ridge" /></p>
+<p><img src="/devlog/seven-mountain-ranges/relief-now.jpg" alt="Relief map: a curving range of stacked thrust sheets between a lowland plain and a gullied plateau, the coast in one corner" /></p>
+<p>That is the range as it stands this month, its crest about 900 m above the sea.</p>
+<p><img src="/devlog/seven-mountain-ranges/crest-now.jpg" alt="The snow on that range's crest, the next sheet's face beside it" /></p>
+<h2>Where it stands</h2>
+<p>It isn't done. Lakes have been tried three ways and taken out each time,
+because they cost more to generate than they showed. The rivers went in this month.</p>
+<p>Every range here comes from a generator: seeded code, no trained model,
+nothing drawn by hand. Claude writes that code with us, and we decide what
+the mountains should be and throw away what isn't it, six times so far.</p>
+</article>
+</main>
+<footer><span>© 2026 Yasno Games</span><a href="/devlog/feed.xml">feed</a></footer>
+</body>
+</html>

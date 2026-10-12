@@ -1,0 +1,138 @@
+---
+title: Seven mountain ranges
+date: 2026-10-12
+author: Yasno Games
+summary: We have built the mountains in our hex-tile MMO seven times. Here is what each one looked like, and where the seventh stands.
+image: range.jpg
+---
+<video src="range.mp4" poster="range.jpg" autoplay muted loop playsinline aria-label="Sliding out over a crest at dawn, looking down across a forested valley to ridge after ridge"></video>
+
+We're Yasno Games, and we're making an MMO on a hex grid: an open world you
+cross on foot, generated from a seed. The mountains in that picture are our
+seventh go at a mountain range. The first six are gone, but git keeps
+everything, so we went back through it to show you what they looked like.
+
+There are two kinds of picture here. The top-down maps are drawn from each
+version's own height code: 20 km of its world, all in the same light, one
+colour for one height across all of them. Everything else is the game itself,
+this month's build unless the text says otherwise.
+
+## Noise, twice
+
+The first ranges, in March 2024, were Perlin noise: a height for every tile,
+read off a smooth random field. Noise makes hills. It never makes a range,
+because a range has a direction, and noise has none.
+
+In October 2025 the noise got regions, and mountain regions got cliffs stepped
+in strata.
+
+<video src="terraces.mp4" poster="noise.jpg" autoplay muted loop playsinline aria-label="Walking among hexagonal columns stepping up a noise hill, February 2026"></video>
+
+That is the second one in the game in February 2026, the week before it went:
+every tile a hexagonal column, so a hill is a staircase of them.
+
+## Plates, then nothing
+
+In February we started from tectonics. The world split into plates, each with
+its own base height, their edges warped so they curve, and a ridge raised
+where two plates push together.
+
+![Relief map: terraces stepping between plates' base heights, crossed by one ridge along a plate boundary](relief-plates.jpg)
+
+What you get is terraces where one plate's height meets the next, and one
+ridge. Two days later we took the heights out and started modelling what lies
+under the crust: denser and lighter provinces, hotspots, heat spreading from
+them. Those were fields, and none of them was a height yet. For those weeks
+the world in the game was flat.
+
+## Placing the mountains
+
+In March we stopped deriving mountains and placed them. A continent grew a
+spine of peak cones joined by ridgelines, and streams grew down from the
+ridges, carving ravines as they merged. Over the summer an erosion stack went
+on top: glacial cirques bitten into the shaded side of the high peaks, and
+slopes shaped convex at the crest and concave at the foot.
+
+![Relief map: a cluster of conical peaks up to 2.8 km with cirque bowls near the summits and ravines down the flanks, each cone's round footprint visible on the plain](relief-spine.jpg)
+
+These are the tallest of the maps, up to 2.8 km, and they had a feel in the
+game we liked.
+
+<video src="spine-flyover.mp4" poster="spine-peak.jpg" autoplay muted loop playsinline aria-label="Turning above the top of a spine peak in the August build, the cone dropping to the coast all round"></video>
+
+That is the view from the top of one, in the August build we rebuilt to film
+it: the cone falling away to the coast on every side.
+
+From above you can see the problem. Each cone is a circle stamped on the
+plain, and where two cones meet there is a straight seam. A placed mountain
+does not know why it is there, so nothing around it agrees with it.
+
+## Letting them emerge
+
+In September the plates came back as the source. Crust thickens where two
+plates push together, and the height follows from the thickness. The spine,
+the cirques and the slope shaping came out: about ten thousand lines of code,
+deleted in one commit.
+
+![Relief map: one smooth swell of high ground with a single steep flank and no ridges or valleys inside it](relief-orogen.jpg)
+
+Thickness gives you a swell. It gives you no ridges, and no valleys inside it.
+
+## Sheets
+
+Two days later we rewrote the plates themselves, and that is the seventh
+range. Where one plate runs under another the crust stacks into sheets, the
+way real fold-and-thrust belts are built.
+
+![Relief map: bands of parallel stepped thrust sheets running in straight lines with sharp 60-degree bends](relief-thrust.jpg)
+
+The plates were cells on a lattice, and the ranges followed the lattice:
+straight runs, 60° corners. The next day every plate edge started being read
+through a smooth warp, so coasts, fronts and ranges bend together and never at
+a corner.
+
+## Walkable
+
+That version had a problem you could feel. Most of the ground was walkable,
+and the ridges, the part you came for, were almost all walls. A player climbs
+one level per tile, and the faces were steeper than that.
+
+We could raise the step or lower the mountains. We lowered the mountains to
+the angle loose rock actually rests at, 34°, with scree running out about 150
+tiles from the foot of each range. That is still too steep to walk straight
+up, so you climb across the face, the way you would a real scree slope.
+Ground at 45° or steeper fell from 2.4% of land to 0.75%, and what stayed
+that steep was mostly gorge walls, which is where you would expect a wall.
+
+For scale: a tile is about 1.7 m across and a level is 0.8 m. The geology is
+Earth's, squeezed so a range fits in a world you cross on foot.
+
+## What didn't work this month
+
+Ravines. We cut a gully down a range's flank every 46 tiles, 17 levels deep.
+In the game it was corrugated iron: a ridge every 80
+metres, walking across it felt like waves, and the far view could not draw
+it. It came out the same day.
+
+What did stay: a range's crest now rounds off as fast as its height wears
+down, trees thin out where the slope gets too steep to hold soil, old
+collisions inside a continent leave worn-down belts instead of nothing, and
+this month rivers started running along the troughs between ridges and
+crossing at the passes.
+
+![A river running down the trough at the foot of a ridge](trough-river.jpg)
+
+![Relief map: a curving range of stacked thrust sheets between a lowland plain and a gullied plateau, the coast in one corner](relief-now.jpg)
+
+That is the range as it stands this month, its crest about 900 m above the sea.
+
+![The snow on that range's crest, the next sheet's face beside it](crest-now.jpg)
+
+## Where it stands
+
+It isn't done. Lakes have been tried three ways and taken out each time,
+because they cost more to generate than they showed. The rivers went in this month.
+
+Every range here comes from a generator: seeded code, no trained model,
+nothing drawn by hand. Claude writes that code with us, and we decide what
+the mountains should be and throw away what isn't it, six times so far.
