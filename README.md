@@ -1,6 +1,22 @@
 # yasno.games
 
-The studio's site: one static page on Firebase Hosting, served from `public/`.
+The studio's site on Firebase Hosting, served from `public/`: the home page,
+the brand kit and the devlog.
+
+## Devlog
+
+A post is a folder, `devlog/<slug>/`, holding `post.md` and the pictures and
+clips it shows; the slug is its address, `yasno.games/devlog/<slug>`.
+`tools/devlog.py` builds `public/devlog/` from them: the index, a page per post
+with its files beside it, and an Atom feed at `/devlog/feed.xml`. Its module
+doc has the fields a post opens with. The output is committed, like the brand
+kit's, and the deploy publishes it as it stands:
+
+```bash
+.venv/Scripts/python -I tools/devlog.py
+```
+
+`AGENTS.md` binds how a post is written.
 
 ## Deploy
 
