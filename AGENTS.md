@@ -16,5 +16,3 @@ the first before drafting a post or a reply. It binds every draft.
 3. The developer edits it and adds what only they know. Every post's `author`
    is Yasno Games.
 4. `python -I tools/devlog.py`, commit the post with `public/devlog/`, push.
-5. Cross-post the full text to the itch.io devlog, opening with "First posted
-   at yasno.games/devlog/<slug>"; on Steam, once a page exists, as an event.
