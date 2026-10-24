@@ -3,9 +3,9 @@ title: Water runs downhill
 date: 2026-10-24
 author: Yasno Games
 summary: The evening our last post went up, we deleted the rivers. Twelve days later they wind down their valleys. This is what they did in between.
-image: river.jpg
+image: valley.jpg
 ---
-![A blue river winding along the floor of a forested valley, seen from the slope above](river.jpg)
+<video src="valley.mp4" poster="valley.jpg" autoplay muted loop playsinline aria-label="Sliding out over a wooded slope above a river winding along the valley floor, the valley opening onto a plain and mountains beyond"></video>
 
 Our last post ended with "the rivers went in this month." That evening we
 deleted them.

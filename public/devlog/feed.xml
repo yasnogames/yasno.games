@@ -14,7 +14,7 @@
 <updated>2026-10-24T00:00:00Z</updated>
 <author><name>Yasno Games</name></author>
 <summary>The evening our last post went up, we deleted the rivers. Twelve days later they wind down their valleys. This is what they did in between.</summary>
-<content type="html">&lt;p&gt;&lt;img src=&quot;https://yasno.games/devlog/water-runs-downhill/river.jpg&quot; alt=&quot;A blue river winding along the floor of a forested valley, seen from the slope above&quot; /&gt;&lt;/p&gt;
+<content type="html">&lt;p&gt;&lt;video src=&quot;https://yasno.games/devlog/water-runs-downhill/valley.mp4&quot; poster=&quot;/devlog/water-runs-downhill/valley.jpg&quot; autoplay muted loop playsinline aria-label=&quot;Sliding out over a wooded slope above a river winding along the valley floor, the valley opening onto a plain and mountains beyond&quot;&gt;&lt;/video&gt;&lt;/p&gt;
 &lt;p&gt;Our last post ended with &amp;quot;the rivers went in this month.&amp;quot; That evening we
 deleted them.&lt;/p&gt;
 &lt;p&gt;They had a flaw nothing we added could reach. The old generator routed water
