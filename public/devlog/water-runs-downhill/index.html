@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Water runs downhill · Yasno Games</title>
+<meta name="description" content="The evening our last post went up, we deleted the rivers. Twelve days later they wind down their valleys. Here is what they did in between.">
+<link rel="canonical" href="https://yasno.games/devlog/water-runs-downhill/">
+<link rel="alternate" type="application/atom+xml" title="Yasno Games devlog" href="/devlog/feed.xml">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121417" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Yasno Games">
+<meta property="og:title" content="Water runs downhill · Yasno Games">
+<meta property="og:description" content="The evening our last post went up, we deleted the rivers. Twelve days later they wind down their valleys. Here is what they did in between.">
+<meta property="og:url" content="https://yasno.games/devlog/water-runs-downhill/">
+<meta property="og:image" content="https://yasno.games/devlog/water-runs-downhill/river.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root {
+  --ground: #F5F5F2;
+  --ink: #121417;
+  --muted: #4A4F57;
+  --link: #1F57D6;
+  --link-hover: #12399A;
+  --rule: #D6D7D2;
+  --card: #FBFBF9;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #121417;
+    --ink: #F5F5F2;
+    --muted: #B4B9C0;
+    --link: #8FB0FF;
+    --link-hover: #C2D4FF;
+    --rule: #2A2E33;
+    --card: #181B1F;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+}
+header, main, footer { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+header { display: flex; align-items: baseline; gap: 14px; padding-top: 28px; padding-bottom: 8px; }
+header img { display: block; width: 120px; height: auto; }
+.mono, header .section, footer {
+  font-family: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+header .section { font-size: 15px; color: var(--muted); }
+main { padding-top: 32px; padding-bottom: 48px; }
+h1 { font-size: clamp(28px, 6vw, 40px); line-height: 1.15; margin: 0 0 8px; }
+h2 { font-size: 24px; line-height: 1.25; margin: 40px 0 0; }
+h3 { font-size: 20px; margin: 32px 0 0; }
+.meta { font-size: 14px; color: var(--muted); margin: 0 0 32px; }
+article img, article video { display: block; max-width: 100%; height: auto; margin: 28px auto; border-radius: 4px; }
+article pre { overflow-x: auto; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 4px; font-size: 15px; }
+article code { font-size: 0.9em; }
+article blockquote { margin: 24px 0; padding: 0 0 0 18px; border-left: 3px solid var(--rule); color: var(--muted); }
+article hr { border: 0; border-top: 1px solid var(--rule); margin: 40px 0; }
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--link-hover); }
+ol.posts { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 32px; }
+.card {
+  display: block; color: inherit; text-decoration: none;
+  border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--card);
+}
+.card:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+.cover { position: relative; aspect-ratio: 1200 / 630; background: #2A2E33; }
+.cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* The title sits on the picture; the scrim keeps it legible on any of them. */
+.cover::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(12, 14, 17, 0.85), rgba(12, 14, 17, 0.35) 45%, rgba(12, 14, 17, 0) 72%);
+}
+.cover .head { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 18px 20px; color: #F5F5F2; }
+.cover .meta { margin: 0 0 4px; color: rgba(245, 245, 242, 0.82); }
+.cover h2 { margin: 0; font-size: clamp(22px, 5vw, 30px); }
+.card:hover h2 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.brief { margin: 0; padding: 16px 20px 18px; }
+footer {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
+  padding-top: 20px; padding-bottom: 28px;
+  border-top: 1px solid var(--rule);
+  font-size: 13px; color: var(--muted);
+}
+</style>
+</head>
+<body>
+<header>
+  <a href="/"><picture>
+    <source srcset="/brand/yasno-wordmark-reversed.svg" media="(prefers-color-scheme: dark)">
+    <img src="/brand/yasno-wordmark.svg" alt="Yasno" width="120" height="23">
+  </picture></a>
+  <a class="section" href="/devlog/">devlog</a>
+</header>
+<main>
+<article>
+<h1>Water runs downhill</h1>
+<p class="meta mono"><time datetime="2026-10-24">24 Oct 2026</time> · Yasno Games</p>
+<p><img src="/devlog/water-runs-downhill/river.jpg" alt="A blue river winding along the floor of a forested valley, seen from the slope above" /></p>
+<p>Our last post ended with &quot;the rivers went in this month.&quot; That evening we
+deleted them: four layers of the world generator, 4,295 lines of code. The
+river above replaced them. It runs about five kilometres from where a new
+player starts.</p>
+<p>The old rivers were routed between points 525 tiles apart. The generator
+knew the ground's height at those points and assumed a straight line between
+them, so wherever a ridge stood between two points, the river ran over it.
+In one stretch of the world we counted 20 places where a river climbed 16
+metres or more. Every patch we made moved the climbs somewhere else.</p>
+<p>The new generator builds the ground on hex cells of seven sizes, each three
+times finer than the one above, from cells 729 tiles across down to single
+tiles. Water is routed at every size. A river found among the big cells is
+handed down to the next size, which lays it over its own finer ground and
+finds smaller rivers there.</p>
+<p><img src="/devlog/water-runs-downhill/floating.jpg" alt="Water hanging in the air as a staircase of blocks up a rocky mountainside" /></p>
+<p>In its first days in the game the new water stood in the air, a staircase of
+blocks up the side of a mountain.</p>
+<p><img src="/devlog/water-runs-downhill/comb.jpg" alt="A plain below a slope, cut by a row of straight parallel streams like the teeth of a comb" /></p>
+<p>Then the rivers ran straight. Each size hands its ground down to the next as
+flat sloping triangles, and every stream on a flat slope takes the same
+steepest way down. A slope full of streams came out as a comb.</p>
+<p><img src="/devlog/water-runs-downhill/drowned.jpg" alt="A world under water: translucent blue walls and sheets standing over cliffs and hills" /></p>
+<p>That is October 15, mid-afternoon.</p>
+<p>What straightened out the comb was handing a river down whole. A level now
+passes each river's course to the next size, which bends it through the
+ground beside it, so a river picks up bends at every size. A stream that
+starts on a plain wanders toward whatever lies lower around it, so streams
+gather into trunks.</p>
+<p><img src="/devlog/water-runs-downhill/straight.jpg" alt="The world viewer's render of a valley: one dead-straight river with straight tributaries joining it at angles" /></p>
+<p><img src="/devlog/water-runs-downhill/winding.jpg" alt="The same valley in the world viewer: the river winds down the valley floor, its banks curving with it" /></p>
+<p>Those two are the same valley in our world viewer, which draws the
+generator's tiles without the game's look: on October 22, then today.</p>
+<p><img src="/devlog/water-runs-downhill/lake-wall.jpg" alt="A broad lake that ends in a straight wall of water standing above the grass, in the rain" /></p>
+<p>Lakes still go wrong. That one, yesterday morning, ends in a straight wall
+of water.</p>
+<p><img src="/devlog/water-runs-downhill/ponds.jpg" alt="A stream with small ponds along it at the bottom of a wooded valley" /></p>
+<p>When they work, a stream runs down a wooded valley and fills a few ponds on
+the way.</p>
+<p>The rivers come from a generator: seeded code, no trained model, nothing
+drawn by hand. Claude writes that code with us, and we decide what a river
+should look like and throw out what isn't one.</p>
+</article>
+</main>
+<footer><span>© 2026 Yasno Games</span><a href="/devlog/feed.xml">feed</a></footer>
+</body>
+</html>
