@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Water runs downhill · Yasno Games</title>
-<meta name="description" content="The evening our last post went up, we deleted the rivers. Twelve days later they wind down their valleys. Here is what they did in between.">
+<meta name="description" content="The evening our last post went up, we deleted the rivers. Twelve days later they wind down their valleys. This is what they did in between.">
 <link rel="canonical" href="https://yasno.games/devlog/water-runs-downhill/">
 <link rel="alternate" type="application/atom+xml" title="Yasno Games devlog" href="/devlog/feed.xml">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -14,7 +14,7 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Yasno Games">
 <meta property="og:title" content="Water runs downhill · Yasno Games">
-<meta property="og:description" content="The evening our last post went up, we deleted the rivers. Twelve days later they wind down their valleys. Here is what they did in between.">
+<meta property="og:description" content="The evening our last post went up, we deleted the rivers. Twelve days later they wind down their valleys. This is what they did in between.">
 <meta property="og:url" content="https://yasno.games/devlog/water-runs-downhill/">
 <meta property="og:image" content="https://yasno.games/devlog/water-runs-downhill/river.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -108,43 +108,95 @@ footer {
 <p class="meta mono"><time datetime="2026-10-24">24 Oct 2026</time> · Yasno Games</p>
 <p><img src="/devlog/water-runs-downhill/river.jpg" alt="A blue river winding along the floor of a forested valley, seen from the slope above" /></p>
 <p>Our last post ended with &quot;the rivers went in this month.&quot; That evening we
-deleted them: four layers of the world generator, 4,295 lines of code. The
-river above replaced them. It runs about five kilometres from where a new
-player starts.</p>
-<p>The old rivers were routed between points 525 tiles apart. The generator
-knew the ground's height at those points and assumed a straight line between
-them, so wherever a ridge stood between two points, the river ran over it.
+deleted them.</p>
+<p>They had a flaw nothing we added could reach. The old generator routed water
+between points 525 tiles apart. It knew the ground's height at those points
+and nowhere else, so it assumed the ground ran straight from one to the
+next, and wherever a ridge stood between two points, the river went over it.
 In one stretch of the world we counted 20 places where a river climbed 16
-metres or more. Every patch we made moved the climbs somewhere else.</p>
-<p>The new generator builds the ground on hex cells of seven sizes, each three
-times finer than the one above, from cells 729 tiles across down to single
-tiles. Water is routed at every size. A river found among the big cells is
-handed down to the next size, which lays it over its own finer ground and
-finds smaller rivers there.</p>
+metres or more.</p>
+<p>We had spent nearly four weeks on it by then, each fix laid over the last: points
+moved onto the troughs between ridges, troughs published for the points to
+find, a rule for where two streams meet. Every fix moved the climbs somewhere
+else. By October 12 four layers of the generator existed only to make
+rivers, and the rivers still climbed. We took out all four, 4,295 lines, and
+started again from what a river has to do.</p>
+<h2>Rules first</h2>
+<p>We wrote the rules down before any code. A big river never climbs. A small
+stream may climb a little. A hollow fills to its lip and spills over, so
+lakes are welcome. And nothing gets checked by sampling the ground along a
+river's length, because the far view of the world can't pay for it.</p>
+<p>Every generator we read that gets rivers right does it one of two ways.
+Some build the terrain from the rivers, and the ranges grow around the
+drainage. Others let a river own the ground under it, cutting it down to a
+bed that only ever falls. Our ranges already come from colliding plates, so
+our rivers had to own their ground.</p>
+<h2>Coarse to fine</h2>
+<p>The next day the world moved onto hex cells of seven sizes, each three times
+finer than the one above, from cells 729 tiles across down to single tiles.
+Water is routed at every size. The coarsest cells find the big rivers and
+cut their valleys. Each finer size takes the rivers handed down to it, lays
+them over its own ground, and finds the smaller streams between them.</p>
+<p><img src="/devlog/water-runs-downhill/valleys.jpg" alt="Two maps of the same square of land around the haven. Left: blue streams branching into rivers, each in its own valley. Right: smooth ground with three faint straight lines and no valleys" /></p>
+<p>On the left is the land around the haven, where new players start, on
+October 13: streams branching into rivers, each in a valley of its own. On
+the morning of the 14th it went into the game.</p>
 <p><img src="/devlog/water-runs-downhill/floating.jpg" alt="Water hanging in the air as a staircase of blocks up a rocky mountainside" /></p>
-<p>In its first days in the game the new water stood in the air, a staircase of
-blocks up the side of a mountain.</p>
+<p>The water stood in the air. A river coming down a mountain hung over the
+slope as a staircase of blocks, and more than half the wet tiles round the
+haven held water above their own ground. Some of that was the generator and
+some was how the game draws a river stepping down from one tile to the next.</p>
+<p><img src="/devlog/water-runs-downhill/drowned.jpg" alt="A world under water: translucent blue walls and sheets standing over cliffs and hills" /></p>
+<p>The drawing went first. A fall is now drawn only where the ground beyond the
+water is lower, and the afternoon before that rule held, the world went
+under walls of water.</p>
+<h2>Combs</h2>
 <p><img src="/devlog/water-runs-downhill/comb.jpg" alt="A plain below a slope, cut by a row of straight parallel streams like the teeth of a comb" /></p>
 <p>Then the rivers ran straight. Each size hands its ground down to the next as
-flat sloping triangles, and every stream on a flat slope takes the same
-steepest way down. A slope full of streams came out as a comb.</p>
-<p><img src="/devlog/water-runs-downhill/drowned.jpg" alt="A world under water: translucent blue walls and sheets standing over cliffs and hills" /></p>
-<p>That is October 15, mid-afternoon.</p>
-<p>What straightened out the comb was handing a river down whole. A level now
-passes each river's course to the next size, which bends it through the
-ground beside it, so a river picks up bends at every size. A stream that
-starts on a plain wanders toward whatever lies lower around it, so streams
+flat sloping triangles, and water on a flat slope takes the one steepest way
+down, the same way for every stream on it. A hex grid makes it worse: a
+stream turns only where the ground beside it falls away faster than the
+ground ahead, and on a smooth flank nowhere does. A mountainside's streams
+came out as the teeth of a comb.</p>
+<p>We tried roughening the ground, which changed nothing, and holding each
+river to the line the coarse cells drew for it, which made rivers climb
+again.</p>
+<p>Then we lost the valleys. We had made where a river starts depend on how
+steep the ground is, and how hard it cuts on the rain its land gathers. The
+haven is dry, gently sloping country, and around it the share of ground any
+river had cut fell from 98% to none. That is the
+right-hand map above.</p>
+<p>Rain was the wrong thing to read. Valleys are cut over thousands of years by
+floods, and a dry country's floods run as high for their land as a wet
+one's. A river now cuts by the land it drains, and rain decides only how
+wide its water runs today. Around the haven, 84% of the ground came back
+cut.</p>
+<p>The comb was still there. A level handed its rivers down as heights at its
+own points, so any bend smaller than one of its cells was lost on the way
+down, and the finer river sat in the straight groove the coarser one left.
+Now a level hands down each river's course whole, and the next size bends it
+through the ground beside it, so a river picks up bends at every size. A
+stream that starts on a plain wanders toward whatever lies lower, so streams
 gather into trunks.</p>
 <p><img src="/devlog/water-runs-downhill/straight.jpg" alt="The world viewer's render of a valley: one dead-straight river with straight tributaries joining it at angles" /></p>
 <p><img src="/devlog/water-runs-downhill/winding.jpg" alt="The same valley in the world viewer: the river winds down the valley floor, its banks curving with it" /></p>
-<p>Those two are the same valley in our world viewer, which draws the
-generator's tiles without the game's look: on October 22, then today.</p>
+<p>That is one valley in our world viewer, which draws the generator's tiles
+without the game's look: on October 22, then today.</p>
+<h2>Lakes</h2>
+<p>Lakes came last. A lake the coarse cells found in a wide basin used to
+vanish at the tiles, because no small cell could see the whole basin, and
+the lake dried to a flat disc.</p>
+<p><img src="/devlog/water-runs-downhill/disc.jpg" alt="The world viewer's render of a broad flat dry disc of grass in a basin, rivers running round its edge" /></p>
+<p>So a lake is handed down like a river. The morning after that went in, this
+was waiting.</p>
 <p><img src="/devlog/water-runs-downhill/lake-wall.jpg" alt="A broad lake that ends in a straight wall of water standing above the grass, in the rain" /></p>
-<p>Lakes still go wrong. That one, yesterday morning, ends in a straight wall
-of water.</p>
+<p>Where a finer valley crossed the lake's rim, the lake stood on at its old
+level, a wall of water over the river that should have drained it. By nine
+that morning each size was flooding every lake handed to it afresh from its
+own ground, and the water standing round the haven fell from 22,848 tiles to
+5,773.</p>
 <p><img src="/devlog/water-runs-downhill/ponds.jpg" alt="A stream with small ponds along it at the bottom of a wooded valley" /></p>
-<p>When they work, a stream runs down a wooded valley and fills a few ponds on
-the way.</p>
+<p>Now a stream coming down a wooded valley fills a few ponds on its way.</p>
 <p>The rivers come from a generator: seeded code, no trained model, nothing
 drawn by hand. Claude writes that code with us, and we decide what a river
 should look like and throw out what isn't one.</p>
