@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yasno Games uses AI · Yasno Games</title>
+<meta name="description" content="Yasno Games uses AI.">
+<link rel="canonical" href="https://yasno.games/ai/">
+<link rel="alternate" type="application/atom+xml" title="Yasno Games devlog" href="/devlog/feed.xml">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121417" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Yasno Games">
+<meta property="og:title" content="Yasno Games uses AI · Yasno Games">
+<meta property="og:description" content="Yasno Games uses AI.">
+<meta property="og:url" content="https://yasno.games/ai/">
+<meta property="og:image" content="https://yasno.games/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root {
+  --ground: #F5F5F2;
+  --ink: #121417;
+  --muted: #4A4F57;
+  --link: #1F57D6;
+  --link-hover: #12399A;
+  --rule: #D6D7D2;
+  --card: #FBFBF9;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #121417;
+    --ink: #F5F5F2;
+    --muted: #B4B9C0;
+    --link: #8FB0FF;
+    --link-hover: #C2D4FF;
+    --rule: #2A2E33;
+    --card: #181B1F;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+}
+header, main, footer { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+header { display: flex; align-items: baseline; gap: 14px; padding-top: 28px; padding-bottom: 8px; }
+header img { display: block; width: 120px; height: auto; }
+.mono, header .section, footer {
+  font-family: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+header .section { font-size: 15px; color: var(--muted); }
+main { padding-top: 32px; padding-bottom: 48px; }
+h1 { font-size: clamp(28px, 6vw, 40px); line-height: 1.15; margin: 0 0 8px; }
+h2 { font-size: 24px; line-height: 1.25; margin: 40px 0 0; }
+h3 { font-size: 20px; margin: 32px 0 0; }
+.meta { font-size: 14px; color: var(--muted); margin: 0 0 32px; }
+article img, article video { display: block; max-width: 100%; height: auto; margin: 28px auto; border-radius: 4px; }
+article pre { overflow-x: auto; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 4px; font-size: 15px; }
+article code { font-size: 0.9em; }
+article blockquote { margin: 24px 0; padding: 0 0 0 18px; border-left: 3px solid var(--rule); color: var(--muted); }
+article hr { border: 0; border-top: 1px solid var(--rule); margin: 40px 0; }
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--link-hover); }
+ol.posts { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 32px; }
+.card {
+  display: block; color: inherit; text-decoration: none;
+  border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--card);
+}
+.card:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+.cover { position: relative; aspect-ratio: 1200 / 630; background: #2A2E33; }
+.cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* The title sits on the picture; the scrim keeps it legible on any of them. */
+.cover::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(12, 14, 17, 0.85), rgba(12, 14, 17, 0.35) 45%, rgba(12, 14, 17, 0) 72%);
+}
+.cover .head { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 18px 20px; color: #F5F5F2; }
+.cover .meta { margin: 0 0 4px; color: rgba(245, 245, 242, 0.82); }
+.cover h2 { margin: 0; font-size: clamp(22px, 5vw, 30px); }
+.card:hover h2 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.brief { margin: 0; padding: 16px 20px 18px; }
+footer {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
+  padding-top: 20px; padding-bottom: 28px;
+  border-top: 1px solid var(--rule);
+  font-size: 13px; color: var(--muted);
+}
+</style>
+</head>
+<body>
+<header>
+  <a href="/"><picture>
+    <source srcset="/brand/yasno-wordmark-reversed.svg" media="(prefers-color-scheme: dark)">
+    <img src="/brand/yasno-wordmark.svg" alt="Yasno" width="120" height="23">
+  </picture></a>
+  <a class="section" href="/ai/">ai</a>
+</header>
+<main>
+<article>
+<h1>Yasno Games uses AI</h1>
+<p>Primarily, we use Anthropic's product suite in our daily workflows. Workflows
+that make us:</p>
+<ul>
+<li>Faster: writing code, debugging, updating documentation</li>
+<li>More efficient: researching topics, gathering and analyzing data</li>
+<li>And, we believe, achieving better outcomes</li>
+</ul>
+<p>We're a (very) small husband and wife team, with one developer and gamer
+(that's me) and one boss in charge keeping things from going (too far) off the
+rails. So it's important we find a way to make progress without compromising
+our financial stability and long term goals.</p>
+<p>And AI helps us do that.</p>
+<p>But there are some things that we aren't going to use AI for as well:</p>
+<ul>
+<li>Replace our vision: AI should never decide what outcomes are desired, that's
+up to us (and later our fans and customers as we begin to engage the
+community more directly)</li>
+<li>Replace our voices: AI should never speak to you on our behalf</li>
+<li>Replace our humanity: AI should never be a replacement for creative
+direction, artistic eye, or human connection</li>
+</ul>
+<p>Will we make mistakes? Yes, in fact, we already have. In our prior devlogs we
+used Opus to draft the initial content and it was immediately evident. As a
+small team learning where and how AI speeds us up and where it would get in
+the way of our creativity, I'm sure we will make mistakes again. But we will
+listen, evolve, and thrive with the support and trust of the community.</p>
+<p>What lines have we drawn so far?</p>
+<ul>
+<li>We <em>will not</em> use AI generated assets. Our own assets are all procedural -
+currently including: the music, the sound effects, the models, the
+animations, the icons, the textures. We do use AI to write those procedural
+generators. (we also use and attribute some 3rd party assets such as sound
+banks)</li>
+<li>We <em>will not</em> use AI to replace our own voice to the public, including
+devlogs, replies, or posts. We do use AI to polish and edit our own written
+voice and content.</li>
+<li>We <em>may</em> accept suggested content from AI as-is without further edits (e.g.
+skill names or factual descriptions like help text). We do not accept such
+suggestions without critical review.</li>
+</ul>
+<p>We wanted to be explicit about this, and we want to ensure our stance is clear
+to the public. We will endeavor to uphold these principles and where we fall
+short, we hope for two things of the public:</p>
+<ul>
+<li>let us know when we make a mistake, holding us accountable to our promises,
+and</li>
+<li>grant us understanding while we continue to navigate appropriate use of AI</li>
+</ul>
+</article>
+</main>
+<footer><span>© 2026 Yasno Games</span><a href="/devlog/feed.xml">feed</a></footer>
+</body>
+</html>

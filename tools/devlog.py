@@ -16,9 +16,14 @@ published. post.md opens with its fields between --- lines:
 studio's own preview stands in. The body is Markdown, raw HTML allowed (a
 <video> needs it); a relative link or image names a file in the post's folder.
 
-public/devlog/ is this script's alone: each run deletes it and writes it again
-— the index, a page per post with its files beside it, and an Atom feed —
-so a post taken out of devlog/ leaves the site too.
+A standing page is a folder, pages/<slug>/, holding page.md and its files,
+served at yasno.games/<slug>/. It opens with title, summary and an optional
+image, no date or author, and sits in neither the index nor the feed.
+
+public/devlog/ and each page's public/<slug>/ are this script's alone: each
+run deletes them and writes them again — the index, a page per post with its
+files beside it, an Atom feed, and the standing pages — so a post or page
+taken out of its folder leaves the site too.
 
     python -I tools/devlog.py
 """
@@ -32,10 +37,14 @@ from markdown_it import MarkdownIt
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 POSTS = ROOT / "devlog"
+PAGES = ROOT / "pages"
 OUT = ROOT / "public" / "devlog"
 SITE = "https://yasno.games"
 FIELDS = {"title", "date", "author", "summary", "image"}
 REQUIRED = FIELDS - {"image"}
+PAGE_FIELDS = {"title", "summary", "image"}
+# public/ folders that are not a page's to delete.
+RESERVED = {"devlog", "brand"}
 
 
 class Post:
@@ -57,18 +66,36 @@ class Post:
         return f"{self.path}{self.image}" if self.image else "/og.png"
 
 
-def front_matter(text, folder):
+class Page:
+    def __init__(self, folder):
+        self.slug = folder.name
+        if self.slug in RESERVED:
+            raise SystemExit(f"{self.slug}: public/{self.slug}/ is not a page's to overwrite")
+        self.folder = folder
+        fields, body = front_matter((folder / "page.md").read_text(encoding="utf-8"), folder, PAGE_FIELDS, {"title", "summary"})
+        self.title = fields["title"]
+        self.summary = fields["summary"]
+        self.image = fields.get("image")
+        if self.image and not (folder / self.image).is_file():
+            raise SystemExit(f"{folder.name}: image {self.image} is not in the page's folder")
+        self.path = f"/{self.slug}/"
+        self.body = render(body, self.path)
+
+    preview = Post.preview
+
+
+def front_matter(text, folder, known=FIELDS, required=REQUIRED):
     lines = text.splitlines()
     if not lines or lines[0].strip() != "---" or "---" not in (l.strip() for l in lines[1:]):
-        raise SystemExit(f"{folder.name}: post.md must open with its fields between --- lines")
+        raise SystemExit(f"{folder.name}: the file must open with its fields between --- lines")
     end = next(i for i, l in enumerate(lines[1:], 1) if l.strip() == "---")
     fields = {}
     for line in lines[1:end]:
         key, sep, value = line.partition(":")
-        if not sep or key.strip() not in FIELDS:
+        if not sep or key.strip() not in known:
             raise SystemExit(f"{folder.name}: unknown field line {line!r}")
         fields[key.strip()] = value.strip()
-    missing = REQUIRED - fields.keys()
+    missing = required - fields.keys()
     if missing:
         raise SystemExit(f"{folder.name}: missing {', '.join(sorted(missing))}")
     return fields, "\n".join(lines[end + 1:])
@@ -172,7 +199,7 @@ footer {
 """
 
 
-def page(title, description, url, image, kind, content):
+def page(title, description, url, image, kind, content, section=("devlog", "/devlog/")):
     e = html.escape
     return f"""<!doctype html>
 <html lang="en">
@@ -202,7 +229,7 @@ def page(title, description, url, image, kind, content):
     <source srcset="/brand/yasno-wordmark-reversed.svg" media="(prefers-color-scheme: dark)">
     <img src="/brand/yasno-wordmark.svg" alt="Yasno" width="120" height="23">
   </picture></a>
-  <a class="section" href="/devlog/">devlog</a>
+  <a class="section" href="{section[1]}">{e(section[0])}</a>
 </header>
 <main>
 {content}
@@ -220,6 +247,11 @@ def post_page(post):
 <p class="meta mono"><time datetime="{post.date}">{when(post.date)}</time> · {e(post.author)}</p>
 {post.body}</article>"""
     return page(f"{post.title} · Yasno Games", post.summary, post.path, post.preview(), "article", content)
+
+
+def standing_page(pg):
+    content = f"<article>\n<h1>{html.escape(pg.title)}</h1>\n{pg.body}</article>"
+    return page(f"{pg.title} · Yasno Games", pg.summary, pg.path, pg.preview(), "website", content, (pg.slug, pg.path))
 
 
 def index_page(posts):
@@ -283,6 +315,14 @@ def main():
     (OUT / "index.html").write_text(index_page(posts), encoding="utf-8")
     (OUT / "feed.xml").write_text(feed(posts), encoding="utf-8")
     print(f"{len(posts)} post(s) -> {OUT.relative_to(ROOT)}")
+    pages = [Page(f) for f in sorted(PAGES.iterdir()) if f.is_dir()] if PAGES.is_dir() else []
+    for pg in pages:
+        out = ROOT / "public" / pg.slug
+        if out.exists():
+            shutil.rmtree(out)
+        shutil.copytree(pg.folder, out, ignore=shutil.ignore_patterns("page.md"))
+        (out / "index.html").write_text(standing_page(pg), encoding="utf-8")
+        print(f"page {pg.slug} -> {out.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

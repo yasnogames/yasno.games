@@ -16,6 +16,9 @@ kit's, and the deploy publishes it as it stands:
 .venv/Scripts/python -I tools/devlog.py
 ```
 
+A standing page, `pages/<slug>/page.md` with its files, is built the same
+way to `public/<slug>/`, with no date and no place in the index or the feed.
+
 `AGENTS.md` binds how a post is written.
 
 ## Deploy
