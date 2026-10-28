@@ -1,6 +1,7 @@
 ---
 title: Yasno Games uses AI
 summary: Yasno Games uses AI.
+updated: 2026-10-28
 ---
 Primarily, we use Anthropic's product suite in our daily workflows. Workflows
 that make us:

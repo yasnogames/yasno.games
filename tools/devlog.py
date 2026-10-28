@@ -17,8 +17,9 @@ studio's own preview stands in. The body is Markdown, raw HTML allowed (a
 <video> needs it); a relative link or image names a file in the post's folder.
 
 A standing page is a folder, pages/<slug>/, holding page.md and its files,
-served at yasno.games/<slug>/. It opens with title, summary and an optional
-image, no date or author, and sits in neither the index nor the feed.
+served at yasno.games/<slug>/. It opens with title, summary, updated (the
+date it last changed, shown at its foot) and an optional image, no author,
+and sits in neither the index nor the feed.
 
 public/devlog/ and each page's public/<slug>/ are this script's alone: each
 run deletes them and writes them again — the index, a page per post with its
@@ -42,7 +43,7 @@ OUT = ROOT / "public" / "devlog"
 SITE = "https://yasno.games"
 FIELDS = {"title", "date", "author", "summary", "image"}
 REQUIRED = FIELDS - {"image"}
-PAGE_FIELDS = {"title", "summary", "image"}
+PAGE_FIELDS = {"title", "summary", "updated", "image"}
 # public/ folders that are not a page's to delete.
 RESERVED = {"devlog", "brand"}
 
@@ -72,9 +73,10 @@ class Page:
         if self.slug in RESERVED:
             raise SystemExit(f"{self.slug}: public/{self.slug}/ is not a page's to overwrite")
         self.folder = folder
-        fields, body = front_matter((folder / "page.md").read_text(encoding="utf-8"), folder, PAGE_FIELDS, {"title", "summary"})
+        fields, body = front_matter((folder / "page.md").read_text(encoding="utf-8"), folder, PAGE_FIELDS, PAGE_FIELDS - {"image"})
         self.title = fields["title"]
         self.summary = fields["summary"]
+        self.updated = datetime.date.fromisoformat(fields["updated"])
         self.image = fields.get("image")
         if self.image and not (folder / self.image).is_file():
             raise SystemExit(f"{folder.name}: image {self.image} is not in the page's folder")
@@ -165,6 +167,7 @@ h1 { font-size: clamp(28px, 6vw, 40px); line-height: 1.15; margin: 0 0 8px; }
 h2 { font-size: 24px; line-height: 1.25; margin: 40px 0 0; }
 h3 { font-size: 20px; margin: 32px 0 0; }
 .meta { font-size: 14px; color: var(--muted); margin: 0 0 32px; }
+.updated { margin: 40px 0 0; }
 article img, article video { display: block; max-width: 100%; height: auto; margin: 28px auto; border-radius: 4px; }
 article pre { overflow-x: auto; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 4px; font-size: 15px; }
 article code { font-size: 0.9em; }
@@ -250,7 +253,8 @@ def post_page(post):
 
 
 def standing_page(pg):
-    content = f"<article>\n<h1>{html.escape(pg.title)}</h1>\n{pg.body}</article>"
+    content = (f"<article>\n<h1>{html.escape(pg.title)}</h1>\n{pg.body}"
+               f'<p class="meta mono updated">Last updated <time datetime="{pg.updated}">{when(pg.updated)}</time></p>\n</article>')
     return page(f"{pg.title} · Yasno Games", pg.summary, pg.path, pg.preview(), "website", content, (pg.slug, pg.path))
 
 
